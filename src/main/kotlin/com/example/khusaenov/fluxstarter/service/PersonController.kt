@@ -23,7 +23,6 @@ constructor(
 
     @GetMapping(path = arrayOf("/person"), produces = arrayOf(org.springframework.http.MediaType.APPLICATION_STREAM_JSON_VALUE))
     fun getPerson(): Persons {
-        val person = Persons(UUID.randomUUID().toString(), "Leniz", "Khusaenov", 24, Collections.singletonList(""))
-        return person
+        return Persons(UUID.randomUUID().toString(), "Leniz", "Khusaenov", 24, Collections.singletonList(""))
     }
 }
