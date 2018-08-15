@@ -1,6 +1,5 @@
 package com.example.khusaenov.fluxstarter.model
 
-import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
 
 /**
