@@ -22,22 +22,22 @@ class ContactController @Autowired constructor(private val contactRepository: Co
 
     @PostMapping(produces = arrayOf(APPLICATION_STREAM_JSON_VALUE))
     fun saveContact(@RequestBody contact: Contact): Mono<Contact>? {
-        return contactRepository.save(contact)
+        return contactRepository.save(contact).log()
     }
 
     @GetMapping(path = arrayOf("/{id}"), produces = arrayOf(APPLICATION_STREAM_JSON_VALUE))
     fun getContactById(@PathVariable id: String): Mono<Contact> {
-        return contactRepository.findById(id)
+        return contactRepository.findById(id).log()
     }
 
     @PutMapping(path = arrayOf("/{id}"), produces = arrayOf(APPLICATION_STREAM_JSON_VALUE))
     fun updateContact(@PathVariable id: String, @RequestBody contact: Contact): Mono<Contact> {
-        return contactRepository.save(contact)
+        return contactRepository.save(contact).log()
     }
 
     @DeleteMapping(path = arrayOf("/{id}"), produces = arrayOf(APPLICATION_STREAM_JSON_VALUE))
     fun deleteContact(@PathVariable contact: Contact): String {
-        contactRepository.delete(contact)
+        contactRepository.delete(contact).log()
         return "Success"
     }
 }

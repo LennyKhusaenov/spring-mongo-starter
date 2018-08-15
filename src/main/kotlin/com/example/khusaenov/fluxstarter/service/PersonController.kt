@@ -18,7 +18,7 @@ constructor(
 
     @GetMapping(path = arrayOf("/persons"), produces = arrayOf(org.springframework.http.MediaType.APPLICATION_STREAM_JSON_VALUE))
     fun getAllPersons(): Flux<Persons> {
-        return personRepository.findAll()
+        return personRepository.findAll().log()
     }
 
     @GetMapping(path = arrayOf("/person"), produces = arrayOf(org.springframework.http.MediaType.APPLICATION_STREAM_JSON_VALUE))
