@@ -25,10 +25,6 @@ class ContactController @Autowired constructor(private val contactRepository: Co
         return contactRepository.save(contact).log()
     }
 
-    @GetMapping(path = arrayOf("/{id}"), produces = arrayOf(APPLICATION_STREAM_JSON_VALUE))
-    fun getContactById(@PathVariable id: String): Mono<Contact> {
-        return contactRepository.findById(id).log()
-    }
 
     @PutMapping(path = arrayOf("/{id}"), produces = arrayOf(APPLICATION_STREAM_JSON_VALUE))
     fun updateContact(@PathVariable id: String, @RequestBody contact: Contact): Mono<Contact> {
