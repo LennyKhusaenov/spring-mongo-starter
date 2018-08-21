@@ -10,7 +10,6 @@ import com.example.khusaenov.fluxstarter.repository.ContactRepository;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -49,16 +48,12 @@ public class ContactService {
     public Mono<ServerResponse> createNewContact(ServerRequest serverRequest) {
         Mono<Contact> newContact = serverRequest.bodyToMono(Contact.class);
         UUID id = UUID.randomUUID();
-        return /*newContact.log().flatMap(
-                contact -> ServerResponse.status(HttpStatus.CREATED).contentType(APPLICATION_JSON)
-                        .body(contactRepository.save(contact), Contact.class));*/
-
-        created(UriComponentsBuilder.fromPath("contacts/" + id).build().toUri())
+        return created(UriComponentsBuilder.fromPath("contacts/" + id).build().toUri())
                 .contentType(APPLICATION_JSON)
                 .body(
                         fromPublisher(
                                 newContact.map(p -> new Contact(p, id))
-                                        .flatMap(contactRepository::save), Contact.class));
+                                        .flatMap(contactRepository::save), Contact.class)).log();
     }
 
 }

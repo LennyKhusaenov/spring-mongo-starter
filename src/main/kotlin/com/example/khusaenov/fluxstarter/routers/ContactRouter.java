@@ -5,6 +5,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RequestPredicates.contentType;
 import static org.springframework.web.reactive.function.server.RequestPredicates.queryParam;
+import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 import com.example.khusaenov.fluxstarter.service.ContactService;
 import java.util.Objects;
@@ -26,14 +27,15 @@ public class ContactRouter {
 
     @Bean
     public RouterFunction<ServerResponse> contactRoutes(ContactService contactService) {
-        MediaType applicationStreamJson = MediaType.APPLICATION_STREAM_JSON;
-        return RouterFunctions.route(GET(CONTACTS).and(accept(applicationStreamJson))
-                .and(queryParam("id", Objects::nonNull)), contactService::getContactById)
-                .andRoute(GET(CONTACTS).and(accept(applicationStreamJson)),
-                        contactService::getAllContacts)
-                .andRoute(POST(CONTACTS).and(accept(MediaType.APPLICATION_JSON)).
-                                and(contentType(MediaType.APPLICATION_JSON)),
-                        contactService::createNewContact);
+        MediaType applicationJson = MediaType.APPLICATION_JSON;
+        return RouterFunctions
+                .nest(accept(applicationJson).and(contentType(applicationJson)),
+                        route(GET(CONTACTS).and(queryParam("id", Objects::nonNull)),
+                                contactService::getContactById)
+                                .andRoute(GET(CONTACTS),
+                                        contactService::getAllContacts)
+                                .andRoute(POST(CONTACTS),
+                                        contactService::createNewContact));
     }
 
 }
