@@ -34,14 +34,14 @@ public class ContactService {
 
     public Mono<ServerResponse> getAllContacts(ServerRequest serverRequest) {
         Flux<Contact> allContacts = contactRepository.findAll();
-        return ServerResponse.ok().contentType(MediaType.APPLICATION_STREAM_JSON)
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(allContacts, Contact.class);
     }
 
     public Mono<ServerResponse> getContactById(ServerRequest serverRequest) {
         Mono<Contact> contactById = contactRepository
                 .findById(serverRequest.queryParam("id").orElseThrow(NoSuchElementException::new));
-        return ServerResponse.ok().contentType(MediaType.APPLICATION_STREAM_JSON)
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(contactById, Contact.class);
     }
 
