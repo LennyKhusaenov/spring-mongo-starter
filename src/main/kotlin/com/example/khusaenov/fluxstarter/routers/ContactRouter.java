@@ -1,9 +1,9 @@
 package com.example.khusaenov.fluxstarter.routers;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RequestPredicates.contentType;
+import static org.springframework.web.reactive.function.server.RequestPredicates.method;
+import static org.springframework.web.reactive.function.server.RequestPredicates.path;
 import static org.springframework.web.reactive.function.server.RequestPredicates.queryParam;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
@@ -11,6 +11,7 @@ import com.example.khusaenov.fluxstarter.service.ContactService;
 import java.util.Objects;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
@@ -29,13 +30,17 @@ public class ContactRouter {
     public RouterFunction<ServerResponse> contactRoutes(ContactService contactService) {
         MediaType applicationJson = MediaType.APPLICATION_JSON;
         return RouterFunctions
-                .nest(accept(applicationJson).and(contentType(applicationJson)),
-                        route(GET(CONTACTS).and(queryParam("id", Objects::nonNull)),
+                .nest(path(CONTACTS).and(accept(applicationJson)).and(contentType(applicationJson)),
+                        route(method(HttpMethod.GET).and(queryParam("id", Objects::nonNull)),
                                 contactService::getContactById)
-                                .andRoute(GET(CONTACTS),
-                                        contactService::getAllContacts)
-                                .andRoute(POST(CONTACTS),
-                                        contactService::createNewContact));
+                                .andRoute(method(HttpMethod.GET), contactService::getAllContacts)
+                                .andRoute(method(HttpMethod.POST),
+                                        contactService::createNewContact)
+                                .andRoute(method(HttpMethod.DELETE)
+                                                .and(queryParam("id", Objects::nonNull)),
+                                        contactService::deleteContact)
+                                .andRoute(method(HttpMethod.PUT),
+                                        contactService::updateContactData));
     }
 
 }
